@@ -147,3 +147,12 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Segreti: mai nel repo
+.env
+.env.local
+.env.*.local
+
+# File locali della Supabase CLI
+supabase/.temp
+supabase/.branches
