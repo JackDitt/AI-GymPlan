@@ -156,3 +156,4 @@ vite.config.ts.timestamp-*
 # File locali della Supabase CLI
 supabase/.temp
 supabase/.branches
+.DS_Store
