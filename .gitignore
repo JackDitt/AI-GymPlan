@@ -148,12 +148,12 @@ vite.config.ts.timestamp-*
 # Turbo Repo
 .turbo
 
-# Segreti: mai nel repo
+# Secret
 .env
 .env.local
 .env.*.local
 
-# File locali della Supabase CLI
+# Local Files in Supabase CLI
 supabase/.temp
 supabase/.branches
 .DS_Store
