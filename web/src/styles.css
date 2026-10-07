@@ -1116,36 +1116,12 @@ td.col-num:not(:has(.cell-btn)) {
 }
 
 .theme-toggle {
-  display: inline-flex;
-  margin-left: 4px;
-  padding: 0;
-  border: 1px solid var(--grid);
-  background: var(--head);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.theme-toggle span {
-  display: inline-flex;
-  align-items: center;
-  min-height: 34px;
-  padding: 0 12px;
-  color: var(--muted);
-}
-
-.theme-toggle span + span {
-  border-left: 1px solid var(--grid);
-}
-
-.theme-toggle span.on {
-  background: var(--sheet);
   color: var(--ink);
-  font-weight: 700;
 }
 
-.theme-toggle:hover span:not(.on) {
-  color: var(--ink);
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
 }
 
 .topnav {
@@ -1175,9 +1151,6 @@ td.col-num:not(:has(.cell-btn)) {
     gap: 14px;
   }
 
-  .theme-toggle span {
-    padding: 0 8px;
-  }
 
   .page {
     padding: 8px 16px 48px;
