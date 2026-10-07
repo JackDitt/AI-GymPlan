@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../lib/auth';
+import ThemeToggle from './ThemeToggle';
 
 export default function Layout() {
   const { session } = useAuth();
@@ -16,6 +17,7 @@ export default function Layout() {
           <NavLink to="/settings" title={session?.user.email ?? ''}>
             Impostazioni
           </NavLink>
+          <ThemeToggle />
         </nav>
       </header>
       <main className="page">

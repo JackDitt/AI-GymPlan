@@ -24,8 +24,9 @@
   color-scheme: light;
 }
 
+/* Notte: follows the system until the user picks Giorno or Notte (data-theme on <html>) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #161616;
     --sheet: #161616;
     --head: #222222;
@@ -42,6 +43,24 @@
     --focus: #ededed;
     color-scheme: dark;
   }
+}
+
+:root[data-theme='dark'] {
+  --bg: #161616;
+  --sheet: #161616;
+  --head: #222222;
+  --label: #1c1c1c;
+  --ink: #ededed;
+  --muted: #a8a8a8;
+  --faint: #7a7a7a;
+  --grid: #333333;
+  --grid-strong: #4a4a4a;
+  --action: #ededed;
+  --action-ink: #111111;
+  --red: #ff7b72;
+  --ok: #6fd08c;
+  --focus: #ededed;
+  color-scheme: dark;
 }
 
 * {
@@ -1096,15 +1115,68 @@ td.col-num:not(:has(.cell-btn)) {
   font-size: 1.05rem;
 }
 
+.theme-toggle {
+  display: inline-flex;
+  margin-left: 4px;
+  padding: 0;
+  border: 1px solid var(--grid);
+  background: var(--head);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.theme-toggle span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  color: var(--muted);
+}
+
+.theme-toggle span + span {
+  border-left: 1px solid var(--grid);
+}
+
+.theme-toggle span.on {
+  background: var(--sheet);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.theme-toggle:hover span:not(.on) {
+  color: var(--ink);
+}
+
+.topnav {
+  align-items: center;
+}
+
+.login-top {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
 /* ---------- small screens: the phone in the gym ---------- */
 
 @media (max-width: 720px) {
   .topbar {
+    flex-wrap: wrap;
+    row-gap: 4px;
     padding: 14px 16px;
   }
 
   .topnav {
-    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .topnav {
+    gap: 14px;
+  }
+
+  .theme-toggle span {
+    padding: 0 8px;
   }
 
   .page {

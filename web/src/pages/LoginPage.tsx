@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { supabase, errorText } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
+import ThemeToggle from '../components/ThemeToggle';
 
 type Mode = 'login' | 'signup' | 'magic';
 
@@ -59,6 +60,9 @@ export default function LoginPage() {
 
   return (
     <main className="login">
+      <div className="login-top">
+        <ThemeToggle />
+      </div>
       <div className="login-intro">
         <h1>AI-GymPlan</h1>
         <p>
