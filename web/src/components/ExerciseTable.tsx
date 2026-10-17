@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { supabase, errorText } from '../lib/supabase';
-import { fmtLoad, fmtNumber, fmtReps, fmtRest, groupByDay } from '../lib/format';
+import { DAYS, dayName, fmtLoad, fmtNumber, fmtReps, fmtRest, groupByDay, weekdayOf } from '../lib/format';
 import type { Change, EditableField, Exercise, WorkoutLog } from '../lib/types';
 import ExerciseEditor from './ExerciseEditor';
 import FeedbackPanel from './FeedbackPanel';
@@ -44,10 +44,9 @@ export default function ExerciseTable({ versionId, exercises, changes, logsByLin
     else onChanged();
   }
 
+  // the week, Monday to Sunday: days without exercises are rest days
   const days = groupByDay(exercises);
-  const dayNumbers = [...days.keys()];
-  const nextDay = dayNumbers.length ? Math.max(...dayNumbers) + 1 : 1;
-  if (open?.kind === 'new' && !days.has(open.day)) days.set(open.day, []);
+  const today = weekdayOf();
 
   const done = (changedSomething: boolean) => {
     setOpen(null);
@@ -84,13 +83,30 @@ export default function ExerciseTable({ versionId, exercises, changes, logsByLin
             </th>
           </tr>
         </thead>
-        {[...days.entries()].map(([day, rows]) => (
-          <tbody key={day} className="day">
+        {DAYS.map((day) => {
+          const rows = days.get(day) ?? [];
+          return (
+          <tbody key={day} className={`day${rows.length ? '' : ' rest'}`}>
             <tr className="day-row">
               <th colSpan={COLS} scope="rowgroup">
-                Giorno {day}
+                {dayName(day)}
+                {editable && day === today && <span className="today-tag">oggi</span>}
               </th>
             </tr>
+            {rows.length === 0 && !(open?.kind === 'new' && open.day === day) && (
+              <tr className="rest-row">
+                <td colSpan={COLS}>
+                  <div className="rest-inner">
+                    <span>Riposo</span>
+                    {editable && (
+                      <button type="button" className="btn ghost" onClick={() => setOpen({ kind: 'new', day })}>
+                        + Aggiungi un esercizio
+                      </button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            )}
             {rows.map((e, i) => {
               const logs = logsByLineage.get(e.lineage_id) ?? [];
               const isOpen = open?.kind === 'row' && open.id === e.id ? open : null;
@@ -174,28 +190,23 @@ export default function ExerciseTable({ versionId, exercises, changes, logsByLin
                 </Fragment>
               );
             })}
-            {editable && (
+            {editable && (rows.length > 0 || (open?.kind === 'new' && open.day === day)) && (
               <tr className="panel-row add-row">
                 <td colSpan={COLS}>
                   {open?.kind === 'new' && open.day === day ? (
                     <ExerciseEditor versionId={versionId} day={day} onDone={done} />
                   ) : (
                     <button type="button" className="btn ghost" onClick={() => setOpen({ kind: 'new', day })}>
-                      + Esercizio al giorno {day}
+                      + Aggiungi un esercizio
                     </button>
                   )}
                 </td>
               </tr>
             )}
           </tbody>
-        ))}
+          );
+        })}
       </table>
-
-      {editable && nextDay <= 7 && !(open?.kind === 'new' && open.day === nextDay) && (
-        <button type="button" className="btn" onClick={() => setOpen({ kind: 'new', day: nextDay })}>
-          + Aggiungi il giorno {nextDay}
-        </button>
-      )}
     </div>
   );
 }

@@ -12,8 +12,10 @@ export default function Layout() {
         </Link>
         <nav className="topnav">
           <NavLink to="/" end>
-            Schede
+            Oggi
           </NavLink>
+          <NavLink to="/week">Settimana</NavLink>
+          <NavLink to="/plans">Schede</NavLink>
           <NavLink to="/settings" title={session?.user.email ?? ''}>
             Impostazioni
           </NavLink>

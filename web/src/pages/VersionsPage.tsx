@@ -35,8 +35,8 @@ export default function VersionsPage() {
     <>
       <PlanHeader plan={plan} current={current} />
       <p className="lead">
-        Ogni revisione settimanale crea una versione nuova. Le precedenti restano qui, così puoi vedere come è cambiata la
-        scheda.
+        Ogni revisione dell'AI che cambia qualcosa crea una versione nuova. Le precedenti restano qui, così puoi vedere come
+        è cambiata la scheda.
       </p>
       <ol className="version-list" reversed>
         {newestFirst.map((v) => {

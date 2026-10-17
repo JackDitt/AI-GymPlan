@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { supabase, errorText } from '../lib/supabase';
 import { useAuth } from '../lib/auth';
-import { fmtDate } from '../lib/format';
 import type { UserSettings } from '../lib/types';
 
 export default function SettingsPage() {
@@ -48,7 +47,7 @@ export default function SettingsPage() {
       <section className="settings-block">
         <h2>Chiave API di Claude</h2>
         <p>
-          La revisione settimanale usa la tua chiave, quindi il costo è sul tuo account Anthropic. Una revisione costa pochi
+          La revisione automatica usa la tua chiave, quindi il costo è sul tuo account Anthropic. Una revisione costa pochi
           centesimi. La chiave viene salvata cifrata e il sito non la mostra più: la usa solo il server durante la
           revisione.
         </p>
@@ -89,7 +88,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="settings-block">
-        <h2>Revisione settimanale</h2>
+        <h2>Revisione automatica</h2>
         <label className="switch">
           <input
             type="checkbox"
@@ -103,17 +102,14 @@ export default function SettingsPage() {
               )
             }
           />
-          <span>Lascia che l'AI aggiorni le mie schede una volta a settimana</span>
+          <span>Lascia che l'AI aggiorni le mie schede</span>
         </label>
+        <p className="hint">
+          Ogni quanto lo scegli tu, scheda per scheda, nelle Regole: anche ogni notte. La revisione gira
+          verso le 3 nel tuo fuso orario ({settings?.timezone ?? '…'}, preso da questo dispositivo), così la mattina trovi la
+          scheda già aggiornata.
+        </p>
         {!hasKey && <p className="hint">Per attivarla serve prima la chiave API. Senza, il sito funziona come una scheda normale.</p>}
-        {settings?.last_review_at && (
-          <p className="hint">
-            Ultima revisione il {fmtDate(settings.last_review_at)}
-            {settings.last_review_status === 'skipped' && ': saltata, nessun feedback nella settimana.'}
-            {settings.last_review_status === 'error' && `: non riuscita (${settings.last_review_error ?? 'errore'}).`}
-            {settings.last_review_status === 'ok' && '.'}
-          </p>
-        )}
       </section>
 
       {error && <p className="msg error">{error}</p>}

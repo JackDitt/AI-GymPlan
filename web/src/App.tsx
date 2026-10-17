@@ -4,6 +4,8 @@ import { useAuth } from './lib/auth';
 import { configError } from './lib/supabase';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
+import TodayPage from './pages/TodayPage';
+import WeekPage from './pages/WeekPage';
 import PlansPage from './pages/PlansPage';
 import PlanPage from './pages/PlanPage';
 import VersionsPage from './pages/VersionsPage';
@@ -39,7 +41,9 @@ export default function App() {
           </RequireAuth>
         }
       >
-        <Route index element={<PlansPage />} />
+        <Route index element={<TodayPage />} />
+        <Route path="week" element={<WeekPage />} />
+        <Route path="plans" element={<PlansPage />} />
         <Route path="plans/:planId" element={<PlanPage />} />
         <Route path="plans/:planId/v/:versionNumber" element={<PlanPage />} />
         <Route path="plans/:planId/versions" element={<VersionsPage />} />

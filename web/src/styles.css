@@ -551,17 +551,29 @@ textarea:focus {
   border-left: 1px solid var(--grid);
 }
 
+.plan-list li {
+  display: flex;
+  align-items: stretch;
+  border-right: 1px solid var(--grid);
+  border-bottom: 1px solid var(--grid);
+}
+
 .plan-link {
+  flex: 1;
+  min-width: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
   min-height: 48px;
   padding: 0 12px;
-  border-right: 1px solid var(--grid);
-  border-bottom: 1px solid var(--grid);
   color: var(--ink);
   text-decoration: none;
+}
+
+.plan-use {
+  align-self: center;
+  font-size: 13px;
 }
 
 .plan-link:hover {
@@ -1134,6 +1146,348 @@ td.col-num:not(:has(.cell-btn)) {
   right: 16px;
 }
 
+/* ---------- week sheet: rest days and today ---------- */
+
+.day.rest .day-row th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.rest-row td {
+  padding: 0 4px 0 12px;
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.rest-inner {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.today-tag {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.today-tag::before {
+  content: '· ';
+}
+
+/* ---------- rules: review frequency ---------- */
+
+.review-freq {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 12px 16px 16px;
+  border: 1px solid var(--grid);
+  min-width: 0;
+}
+
+.review-freq legend {
+  padding: 0 6px;
+  margin-left: -6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.review-freq .hint {
+  margin: 0;
+}
+
+.review-status {
+  color: var(--ink);
+}
+
+/* ---------- oggi: what to do today ---------- */
+
+.today {
+  max-width: 760px;
+}
+
+.today-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 16px;
+  margin-bottom: 16px;
+}
+
+.today-date {
+  grid-column: 1 / -1;
+  margin: 0 0 2px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.today-date::first-letter {
+  text-transform: uppercase;
+}
+
+/* the day, printed large like the week number on the plan */
+.today-day {
+  margin: 0;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.today-plan {
+  grid-column: 1;
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.today-plan a {
+  color: var(--muted);
+}
+
+.today-progress {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  align-self: end;
+  margin: 0;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.today-progress.complete::before {
+  content: '✓ ';
+}
+
+.week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-bottom: 20px;
+  border-top: 1px solid var(--grid);
+  border-left: 1px solid var(--grid);
+}
+
+.ws-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 52px;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid var(--grid);
+  border-bottom: 1px solid var(--grid);
+  border-radius: 0;
+  background: var(--head);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ws-day:hover {
+  background: var(--label);
+}
+
+.ws-letter {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ws-count {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ws-day.rest .ws-count {
+  color: var(--faint);
+  font-weight: 400;
+}
+
+.ws-day.is-today .ws-letter {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.ws-day[aria-pressed='true'] {
+  background: var(--sheet);
+  box-shadow: inset 0 3px 0 var(--ink);
+}
+
+.banner.moved {
+  margin-bottom: 16px;
+}
+
+.today-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--grid-strong);
+  border-left: 1px solid var(--grid);
+}
+
+.today-ex {
+  border-right: 1px solid var(--grid);
+  border-bottom: 1px solid var(--grid);
+  background: var(--sheet);
+}
+
+.te-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  min-height: 72px;
+}
+
+.te-idx {
+  display: grid;
+  place-items: center;
+  background: var(--head);
+  border-right: 1px solid var(--grid);
+  color: var(--faint);
+  font-size: 13px;
+}
+
+.te-idx svg {
+  width: 18px;
+  height: 18px;
+}
+
+.today-ex.done .te-idx {
+  color: var(--ink);
+}
+
+.te-body {
+  padding: 10px 12px;
+  min-width: 0;
+}
+
+.te-body p {
+  margin: 0;
+}
+
+.te-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.te-target {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 14px;
+  margin-top: 2px !important;
+}
+
+.te-sets {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.te-load {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.te-rest {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.te-notes {
+  margin-top: 2px !important;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.te-log {
+  margin-top: 6px !important;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.te-comment {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* finished exercises step back, so what is left stands out */
+.today-ex.done .te-name,
+.today-ex.done .te-target {
+  color: var(--muted);
+}
+
+.today-ex.done .te-sets {
+  font-size: 18px;
+}
+
+.te-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 6px 0 4px;
+}
+
+.te-done {
+  min-width: 84px;
+}
+
+.te-msg {
+  margin: 0;
+  padding: 0 12px 10px 56px;
+}
+
+.today-ex.open {
+  background: var(--label);
+}
+
+.te-form {
+  padding: 12px 12px 16px 56px;
+  border-top: 1px solid var(--grid);
+}
+
+.te-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pain-hint {
+  margin: -4px 0 0;
+  color: var(--red);
+}
+
+.te-undo {
+  margin-left: auto;
+}
+
+.rest-day {
+  padding: 20px 16px 24px;
+  border: 1px solid var(--grid);
+  border-top-color: var(--grid-strong);
+}
+
+.rest-day p {
+  margin: 0 0 12px;
+}
+
+.rest-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px !important;
+}
+
+.today-empty .btn {
+  margin-top: 4px;
+}
+
 /* ---------- small screens: the phone in the gym ---------- */
 
 @media (max-width: 720px) {
@@ -1335,6 +1689,39 @@ td.col-num:not(:has(.cell-btn)) {
 
   .version-list li {
     grid-template-columns: 56px 1fr;
+  }
+
+  .today-day {
+    font-size: 44px;
+  }
+
+  .te-row {
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+  }
+
+  .te-form {
+    padding-left: 12px;
+  }
+
+  .te-msg {
+    padding-left: 12px;
+  }
+
+  .te-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .te-done {
+    min-width: 72px;
+    padding: 0 12px;
+  }
+
+  .plan-list li {
+    flex-wrap: wrap;
+  }
+
+  .plan-use {
+    margin: 0 4px 6px;
   }
 }
 

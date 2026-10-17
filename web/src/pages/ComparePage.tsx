@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { supabase, errorText } from '../lib/supabase';
 import { usePlan } from '../lib/usePlan';
-import { fieldLabel, fmtDate, fmtFieldValue, fmtLoad, fmtNumber, fmtReps, fmtRest } from '../lib/format';
+import { fieldLabel, fmtDate, fmtFieldValue, fmtLoad, fmtNumber, fmtReps, fmtRest, dayName } from '../lib/format';
 import type { Change, Exercise } from '../lib/types';
 import PlanHeader from '../components/PlanHeader';
 
@@ -154,7 +154,7 @@ export default function ComparePage() {
                 const prevDay = i > 0 ? visible[i - 1].day : null;
                 return (
                   <div key={r.lineage} className="compare-group">
-                    {r.day !== prevDay && <div className="compare-day">Giorno {r.day}</div>}
+                    {r.day !== prevDay && <div className="compare-day">{dayName(r.day)}</div>}
                     <div className={`compare-row${r.diff.size ? ' has-diff' : ''}`} role="row">
                       <Side ex={r.a} diff={r.diff} side="a" />
                       <Side ex={r.b} diff={r.diff} side="b" />
