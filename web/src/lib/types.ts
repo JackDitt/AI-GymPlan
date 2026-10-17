@@ -20,7 +20,7 @@ export interface Exercise {
   id: string;
   version_id: string;
   lineage_id: string;
-  day: number;
+  day: number; // day of the week: 1 = Monday ... 7 = Sunday
   position: number;
   name: string;
   sets: number | null;
@@ -71,14 +71,22 @@ export interface PlanRules {
   goal: string | null;
   max_changes_per_review: number;
   extra_rules: string | null;
+  review_every_days: number; // 1 = every night, 7 = weekly
+  review_on_pain: boolean; // also review the night after pain is logged
   updated_at: string;
+}
+
+export interface PlanReviewState {
+  plan_id: string;
+  last_review_at: string | null;
+  last_status: 'ok' | 'skipped' | 'error' | null;
+  last_error: string | null;
 }
 
 export interface UserSettings {
   user_id: string;
   ai_enabled: boolean;
   api_key_secret_id: string | null;
-  last_review_at: string | null;
-  last_review_status: 'ok' | 'skipped' | 'error' | null;
-  last_review_error: string | null;
+  timezone: string; // reviews run at night in this time zone
+  active_plan_id: string | null; // the plan the app opens on
 }

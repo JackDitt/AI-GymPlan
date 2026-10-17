@@ -62,3 +62,9 @@ export const MoonIcon = () => (
     <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
   </svg>
 );
+
+export const CheckIcon = () => (
+  <svg {...base}>
+    <path d="M5 12.5l4.5 4.5L19 7.5" />
+  </svg>
+);

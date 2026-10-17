@@ -11,7 +11,7 @@ export default function PlanHeader({ plan, current }: { plan: Plan; current: Pla
       </h1>
       <nav className="subnav" aria-label="Sezioni della scheda">
         <NavLink to={base} end>
-          Scheda
+          Settimana
         </NavLink>
         <NavLink to={`${base}/versions`}>Versioni</NavLink>
         <NavLink to={`${base}/compare`}>Confronta</NavLink>

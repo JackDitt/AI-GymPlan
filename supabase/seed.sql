@@ -32,9 +32,17 @@ insert into auth.identities (
 );
 -- (user_settings is created by the on_auth_user_created trigger)
 
--- 2. An invented 3-day full-body plan
-insert into public.plans (id, user_id, name) values
-  ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'Full body 3 giorni');
+-- 2. An invented 3-day full-body plan: Monday, Wednesday, Friday
+--    (exercises.day is the day of the week, 1 = Monday ... 7 = Sunday)
+insert into public.plans (id, user_id, name, created_at) values
+  ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111', 'Full body 3 giorni',
+   now() - interval '14 days');
+
+-- the app opens on this plan; the AI reviews it once a week (default),
+-- and also the night after pain is logged (default)
+update public.user_settings
+  set active_plan_id = '22222222-2222-2222-2222-222222222222', timezone = 'Europe/Rome'
+  where user_id = '11111111-1111-1111-1111-111111111111';
 
 insert into public.plan_rules (plan_id, user_id, split, days_per_week, goal, max_changes_per_review, extra_rules) values
   ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111',
@@ -52,29 +60,34 @@ values
   ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 1, 1, 'Squat',              4, 6, 8,   60,  150, null, true),
   ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 1, 2, 'Panca piana',        4, 6, 8,   50,  150, null, false),
   ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 1, 3, 'Rematore manubrio',  3, 8, 12,  22,   90, 'Per braccio', false),
-  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 2, 1, 'Stacco rumeno',      3, 8, 10,  60,  120, null, false),
-  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 2, 2, 'Military press',     3, 6, 8,   30,  120, null, false),
-  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 2, 3, 'Lat machine',        3, 10, 12, 45,   90, null, false),
-  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 3, 1, 'Leg press',          3, 10, 12, 120,  120, null, false),
-  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 3, 2, 'Panca inclinata manubri', 3, 8, 10, 18, 90, null, false),
-  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 3, 3, 'Plank',              3, null, null, null, 60, '45 secondi', false);
+  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 3, 1, 'Stacco rumeno',      3, 8, 10,  60,  120, null, false),
+  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 3, 2, 'Military press',     3, 6, 8,   30,  120, null, false),
+  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 3, 3, 'Lat machine',        3, 10, 12, 45,   90, null, false),
+  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 5, 1, 'Leg press',          3, 10, 12, 120,  120, null, false),
+  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 5, 2, 'Panca inclinata manubri', 3, 8, 10, 18, 90, null, false),
+  ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 5, 3, 'Plank',              3, null, null, null, 60, '45 secondi', false);
 
 -- Feedback written during the first week
-insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain)
-select e.user_id, e.id, current_date - 10, 4, 8, 50, 7, 'Facile, prossima volta salirei', false
+insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain, created_at)
+select e.user_id, e.id, current_date - 10, 4, 8, 50, 7, 'Facile, prossima volta salirei', false, (current_date - 10) + time '19:30'
 from public.exercises e where e.version_id = '33333333-3333-3333-3333-333333333333' and e.name = 'Panca piana';
 
-insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain)
-select e.user_id, e.id, current_date - 9, 3, 6, 30, 9.5, 'Fastidio alla spalla destra', true
+insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain, created_at)
+select e.user_id, e.id, current_date - 9, 3, 6, 30, 9.5, 'Fastidio alla spalla destra', true, (current_date - 9) + time '19:30'
 from public.exercises e where e.version_id = '33333333-3333-3333-3333-333333333333' and e.name = 'Military press';
 
--- 3. Version 2: an example of what the weekly AI review will produce (Phase 3).
+-- 3. Version 2: an example of what an AI review will produce (Phase 3).
 --    Exercises are copied with the same lineage_id, two of them changed.
 insert into public.plan_versions (id, user_id, plan_id, version_number, created_by, summary, created_at) values
   ('44444444-4444-4444-4444-444444444444', '11111111-1111-1111-1111-111111111111',
    '22222222-2222-2222-2222-222222222222', 2, 'ai',
    'Carico in panca aumentato; military press sostituita per il fastidio alla spalla.',
    now() - interval '7 days');
+
+-- outcome of that review (written by the backend for real users)
+insert into public.plan_review_state (plan_id, user_id, last_review_at, last_status) values
+  ('22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111111',
+   now() - interval '7 days', 'ok');
 
 insert into public.exercises
   (user_id, version_id, lineage_id, day, position, name, sets, reps_min, reps_max, load_kg, rest_seconds, notes, locked)
@@ -107,10 +120,10 @@ from public.exercises e2
 where e2.version_id = '44444444-4444-4444-4444-444444444444' and e2.name = 'Landmine press';
 
 -- Feedback written this week, on the current version
-insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain)
-select e.user_id, e.id, current_date - 2, 4, 7, 52.5, 8, 'Ultima serie dura ma pulita', false
+insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain, created_at)
+select e.user_id, e.id, current_date - 2, 4, 7, 52.5, 8, 'Ultima serie dura ma pulita', false, (current_date - 2) + time '19:30'
 from public.exercises e where e.version_id = '44444444-4444-4444-4444-444444444444' and e.name = 'Panca piana';
 
-insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain)
-select e.user_id, e.id, current_date - 1, 3, 8, 20, 7, 'Nessun fastidio', false
+insert into public.workout_logs (user_id, exercise_id, performed_on, sets_done, reps_done, load_kg_done, rpe, comment, pain, created_at)
+select e.user_id, e.id, current_date - 1, 3, 8, 20, 7, 'Nessun fastidio', false, (current_date - 1) + time '19:30'
 from public.exercises e where e.version_id = '44444444-4444-4444-4444-444444444444' and e.name = 'Landmine press';

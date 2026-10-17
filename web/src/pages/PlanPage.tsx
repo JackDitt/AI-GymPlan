@@ -7,8 +7,11 @@ import type { Exercise, WorkoutLog } from '../lib/types';
 import PlanHeader from '../components/PlanHeader';
 import ExerciseTable from '../components/ExerciseTable';
 
-export default function PlanPage() {
-  const { planId, versionNumber } = useParams();
+/** The whole week of a plan, editable. Used for /plans/:planId and for /week (the active plan). */
+export default function PlanPage({ planId: activePlanId }: { planId?: string } = {}) {
+  const params = useParams();
+  const planId = activePlanId ?? params.planId;
+  const { versionNumber } = params;
   const { plan, versions, current, error: planError, loading } = usePlan(planId);
   const version = versionNumber ? versions.find((v) => v.version_number === Number(versionNumber)) : current;
   const editable = !!version && version.id === current?.id;
@@ -80,8 +83,8 @@ export default function PlanPage() {
 
       {exercises.length === 0 && editable && (
         <p className="lead">
-          La scheda è vuota. Aggiungi il primo esercizio del giorno 1: per ognuno puoi indicare serie, ripetizioni, carico e
-          recupero.
+          La scheda è vuota. Aggiungi gli esercizi nei giorni in cui ti alleni: per ognuno puoi indicare serie, ripetizioni,
+          carico e recupero. Gli altri giorni restano di riposo.
         </p>
       )}
 
@@ -98,7 +101,7 @@ export default function PlanPage() {
       {editable && exercises.length > 0 && (
         <p className="hint legend">
           Tocca una casella per modificarla. Il lucchetto blocca un esercizio: l'AI non lo cambierà. Quello che è cambiato
-          rispetto alla settimana prima lo trovi in Confronta.
+          rispetto alla versione prima lo trovi in Confronta.
         </p>
       )}
     </>
